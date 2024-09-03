@@ -1,0 +1,80 @@
+### create new user
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+    "username": "user1",
+    "email": "user1@example.com"
+}
+
+###
+### List all users (should show the newly created user)
+GET http://localhost:8080/users
+
+###
+### create another user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "username": "user2",
+    "email": "user2@example.com"
+}
+
+###
+### List all users (should show to users)
+GET http://localhost:8080/users
+
+###
+### user1 crate a new poll
+POST http://localhost:8080/polls
+Content-Type: application/json
+
+{
+    "question": "Is Java awesome?",
+    "publishedAT": "2024-09-03T12:00:00Z",
+    "validUntil": "2024-09-03T12:00:00Z",
+    "username": "user1",
+    "voteOptions": [
+        {"option": "Yes"},
+        {"option": "No"}
+    ]
+}
+
+###
+### list polls (should show the new poll)
+GET http://localhost:8080/polls
+
+###
+### user2 vote on the poll
+POST http://localhost:8080/votes
+Content-Type: application/json
+
+{
+    "pollId": 1,
+    "username": "user2",
+    "voteOption": {"caption": "Yes"}
+}
+
+###
+### user2 change vote
+PUT http://localhost:8080/votes/1
+Content-Type: application/json
+
+{
+    "pollId": 1,
+    "username": "user2",
+    "voteOption": {"caption": "No"}
+}
+
+###
+### list votes (should show the recent vote for user2)
+GET http://localhost:8080/votes
+
+###
+### delete the one poll
+DELETE http://localhost:8080/polls/1
+
+###
+### list votes (should be empty)
+GET http://localhost:8080/votes
