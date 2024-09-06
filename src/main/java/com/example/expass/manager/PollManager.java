@@ -2,63 +2,100 @@ package com.example.expass.manager;
 
 import com.example.expass.model.Poll;
 import com.example.expass.model.User;
+import com.example.expass.model.Vote;
+import com.example.expass.model.VoteOption;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class PollManager {
-    private HashMap<Integer, Poll> polls = new HashMap<>();
-    private HashMap<Integer, User> users = new HashMap<>();
+    private Map<Long, Poll> polls = new HashMap<>();
+    private Map<Long, User> users = new HashMap<>();
+    private Map<Long, VoteOption> voteOptions = new HashMap<>();
+    private Map<Long, Vote> votes = new HashMap<>();
 
 
-    public PollManager() {
+    // methods to manage Users
+    public void addUser(Long userId, User user){
+        users.put(userId, user);
+    }
+
+    public User getUser(Long userId){
+        return users.get(userId);
+    }
+
+    public void removeUser(Long userId){
+        users.remove(userId);
     }
 
 
-    // Method to poll
-    public  void addPoll(Poll poll){
-        polls.put(poll.getPollId(), poll);
+    // methods to manage Polls
+    public void addPoll(Long pollId, Poll poll){
+        polls.put(pollId, poll);
     }
 
-    public Poll getPoll(Poll poll){
-        return polls.get(poll.getPollId());
+    public Poll getPoll(Long pollId){
+        return polls.get(pollId);
     }
 
-    public void removePoll(Poll poll){
-        polls.remove(poll.getPollId());
+    public void removePoll(Long pollId){
+        polls.remove(pollId);
     }
 
-    public boolean pollExists(Poll poll){
-        return polls.containsKey(poll.getPollId());
+    // methods to manage Vote
+    public void addVote(Long voteId, Vote vote){
+        votes.put(voteId, vote);
     }
 
-
-    // Method to user
-    public void addUser(User user){
-        users.put(user.getUserId(), user);
+    public Vote getVote(Long voteId){
+        return votes.get(voteId);
     }
 
-    public User getUser(User user){
-        return users.get(user.getUserId());
-    }
-
-    public void removeUser(User user){
-        users.remove(user.getUserId());
-    }
-
-    public boolean userExists(User user){
-        return users.containsKey(user.getUserId());
+    public void removeVote(Long voteId){
+        votes.remove(voteId);
     }
 
 
-    // Get all Polls and Users
-
-    public HashMap<Integer, Poll> getAllPolls(){
-        return polls;
+    // methods to manage VoteOption
+    public void addVoteOption(Long voteOptionId, VoteOption voteOption){
+        voteOptions.put(voteOptionId, voteOption);
     }
 
-    public HashMap<Integer, User> getAllUsers(){
-        return users;
+    public VoteOption getVoteOption(Long voteOptionId){
+        return voteOptions.get(voteOptionId);
+    }
+
+    public void removeVoteOption(Long voteOptionId){
+        voteOptions.remove(voteOptionId);
+    }
+
+
+    // convenience methods to fetch all users, polls, votes and voteOptions
+    public Collection<User> getUsers() {
+        return users.values();
+    }
+
+    public Collection<Poll> getPolls() {
+        return polls.values();
+    }
+
+    public Collection<VoteOption> getVoteOptions() {
+        return voteOptions.values();
+    }
+
+    public Collection<Vote> getVotes() {
+        return votes.values();
+    }
+
+    // additional methods
+    public boolean isUserExist(Long userId){
+        return users.containsKey(userId);
+    }
+
+    public boolean isPollExist(Long pollId){
+        return polls.containsKey(pollId);
     }
 }

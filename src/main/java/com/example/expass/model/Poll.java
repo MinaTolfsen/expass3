@@ -1,27 +1,28 @@
 package com.example.expass.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 import java.time.Instant;
 import java.util.List;
 
 public class Poll {
+    private Long pollId;
+    private Long userId;
     private String question;
     private Instant publishedAt;
     private Instant validUntil;
     private List<VoteOption> voteOptions;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pollId;
-
 
     public Poll(){
-
     }
 
+    // Getters and Setters
+    public Long getPollId() {
+        return pollId;
+    }
+
+    public void setPollId(Long pollId) {
+        this.pollId = pollId;
+    }
 
     public String getQuestion() {
         return question;
@@ -55,11 +56,11 @@ public class Poll {
         this.voteOptions = voteOptions;
     }
 
-    public Integer getPollId() {
-        return pollId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setPollId(Integer pollId) {
-        this.pollId = pollId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

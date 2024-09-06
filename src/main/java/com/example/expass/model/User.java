@@ -5,17 +5,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 public class User {
+    private Long userId;
     private String username;
     private String email;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+
+    public User(){}
 
 
-    public User(){
+    // Getters and Setters
+
+
+    public Long getUserId() {
+        return userId;
     }
 
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getUsername() {
         return username;
@@ -31,13 +38,5 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 }
