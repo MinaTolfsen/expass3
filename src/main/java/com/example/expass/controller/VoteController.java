@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/votes")
@@ -53,6 +54,12 @@ public class VoteController {
     @DeleteMapping("/{voteId}")
     public void deleteVote(@PathVariable Long voteId){
         pollManager.removeVote(voteId);
+    }
+
+    // get votes by poll id
+    @GetMapping("/poll/{pollId}")
+    public List<Vote> getVotesByPollId(@PathVariable Long pollId){
+        return pollManager.getVotes().stream().filter(vote -> vote.getPollId().equals(pollId)).toList();
     }
 
 }

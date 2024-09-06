@@ -3,6 +3,7 @@ package com.example.expass.controller;
 import com.example.expass.manager.PollManager;
 import com.example.expass.model.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -46,8 +47,9 @@ public class PollController {
 
     // delete a poll
     @DeleteMapping("/{pollId}")
-    public void deletePoll(@PathVariable Long pollId){
+    public ResponseEntity<String> deletePoll(@PathVariable Long pollId){
         pollManager.removePoll(pollId);
+        return ResponseEntity.ok("Poll deleted successfully");
     }
 
 }

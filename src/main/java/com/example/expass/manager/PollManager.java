@@ -43,6 +43,7 @@ public class PollManager {
 
     public void removePoll(Long pollId){
         polls.remove(pollId);
+        votes.entrySet().removeIf(entry -> entry.getValue().getPollId().equals(pollId));
     }
 
     // methods to manage Vote
