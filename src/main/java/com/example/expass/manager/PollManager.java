@@ -46,6 +46,7 @@ public class PollManager {
         votes.entrySet().removeIf(entry -> entry.getValue().getPollId().equals(pollId));
     }
 
+
     // methods to manage Vote
     public void addVote(Long voteId, Vote vote){
         votes.put(voteId, vote);
@@ -90,6 +91,7 @@ public class PollManager {
     public Collection<Vote> getVotes() {
         return votes.values();
     }
+
 
     // additional methods
     public boolean isUserExist(Long userId){

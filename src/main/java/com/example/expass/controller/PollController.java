@@ -15,6 +15,7 @@ public class PollController {
     @Autowired
     private PollManager pollManager;
 
+
     // fetch all polls
     @GetMapping
     public Collection<Poll> getAllPolls(){
@@ -51,5 +52,4 @@ public class PollController {
         pollManager.removePoll(pollId);
         return ResponseEntity.ok("Poll deleted successfully");
     }
-
 }

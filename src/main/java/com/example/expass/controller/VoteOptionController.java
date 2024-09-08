@@ -14,6 +14,7 @@ public class VoteOptionController {
     @Autowired
     private PollManager pollManager;
 
+
     // fetch all voteOptions
     @GetMapping
     public Collection<VoteOption> getAllVoteOptions(){

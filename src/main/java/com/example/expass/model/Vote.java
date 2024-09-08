@@ -13,8 +13,8 @@ public class Vote {
     public Vote(){
     }
 
-    // Getters and Setters
 
+    // Getters and Setters
 
     public Long getVoteId() {
         return voteId;

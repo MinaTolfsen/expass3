@@ -11,6 +11,7 @@ public class VoteOption {
 
 
     // Getters and Setters
+
     public Long getVoteOptionId() {
         return voteOptionId;
     }

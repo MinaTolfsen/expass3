@@ -15,7 +15,9 @@ public class Poll {
     public Poll(){
     }
 
+
     // Getters and Setters
+
     public Long getPollId() {
         return pollId;
     }

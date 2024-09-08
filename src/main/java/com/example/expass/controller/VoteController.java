@@ -15,6 +15,7 @@ public class VoteController {
     @Autowired
     private PollManager pollManager;
 
+
     // fetch all votes
     @GetMapping
     public Collection<Vote> getAllVotes(){
@@ -61,5 +62,4 @@ public class VoteController {
     public List<Vote> getVotesByPollId(@PathVariable Long pollId){
         return pollManager.getVotes().stream().filter(vote -> vote.getPollId().equals(pollId)).toList();
     }
-
 }
