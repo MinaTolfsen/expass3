@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/voteOptions")
 public class VoteOptionController {
 
@@ -23,7 +24,7 @@ public class VoteOptionController {
 
     // fetch a single voteOption by id
     @GetMapping("/{voteOptionId}")
-    public VoteOption getVoteOption(@PathVariable Long voteOptionId){
+    public VoteOption getVoteOption(@PathVariable String voteOptionId){
         return pollManager.getVoteOption(voteOptionId);
     }
 
@@ -36,14 +37,14 @@ public class VoteOptionController {
 
     // upadte an existing voteOption
     @PutMapping("/{voteOptionId}")
-    public VoteOption updateVoteOption(@PathVariable Long voteOptionId, @RequestBody VoteOption updateVoteOption){
+    public VoteOption updateVoteOption(@PathVariable String voteOptionId, @RequestBody VoteOption updateVoteOption){
         pollManager.addVoteOption(voteOptionId, updateVoteOption);
         return updateVoteOption;
     }
 
     // delete a voteOption
     @DeleteMapping("/{voteOptionId}")
-    public void deleteVoteOption(@PathVariable Long voteOptionId){
+    public void deleteVoteOption(@PathVariable String voteOptionId){
         pollManager.removeVoteOption(voteOptionId);
     }
 }

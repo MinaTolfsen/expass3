@@ -1,10 +1,12 @@
 package com.example.expass.client;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -16,69 +18,68 @@ public class PollAppIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testPollAppScenarios() throws Exception {
-        // 1. Create User 1
+    public void testScenarioFlow() throws Exception {
+        // Create User 1
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 1, \"username\": \"user1\", \"email\": \"user1@example.com\" }"))
+                        .content("{ \"username\": \"user1\", \"email\": \"user1@example.com\" }"))
                 .andExpect(status().isOk());
 
-        // 2. List all users (should contain User 1)
+        // List all users (should show User 1)
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(content().json("[{ \"username\": \"user1\", \"email\": \"user1@example.com\" }]"));
 
-        // 3. Create User 2
+        // Create User 2
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 2, \"username\": \"user2\", \"email\": \"user2@example.com\" }"))
+                        .content("{ \"username\": \"user2\", \"email\": \"user2@example.com\" }"))
                 .andExpect(status().isOk());
 
-        // 4. List all users (should contain User 1 and User 2)
-        /*mockMvc.perform(get("/users"))
+        // List all users (should show User 1 and User 2)
+        mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));*/
+                .andExpect(content().json("[{ \"username\": \"user1\", \"email\": \"user1@example.com\" }, " +
+                        "{ \"username\": \"user2\", \"email\": \"user2@example.com\" }]"));
 
-        // 5. User 1 creates a new poll
+        // User 1 creates a new poll
         mockMvc.perform(post("/polls")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 1, \"question\": \"What is your favorite color?\"," +
-                                "\"publishedAt\": \"2023-01-01T00:00:00Z\", \"validUntil\": \"2023-12-31T23:59:59Z\"," +
-                                "\"voteOptions\": [{ \"id\": 1, \"caption\": \"Red\", \"presentationOrder\": 1 }, " +
-                                "{ \"id\": 2, \"caption\": \"Blue\", \"presentationOrder\": 2 }] }"))
+                        .content("{ \"username\": \"user1\", \"question\": \"What is your favorite color?\", \"publishedAt\": \"2024-09-03T12:00:00Z\", \"validUntil\": \"2024-09-10T12:00:00Z\", " +
+                                "\"voteOptions\": [{ \"caption\": \"Red\", \"presentationOrder\": 1 }, { \"caption\": \"Green\", \"presentationOrder\": 2 }, { \"caption\": \"Blue\", \"presentationOrder\": 3 }] }"))
                 .andExpect(status().isOk());
 
-        // 6. List all polls (should contain the new poll)
+        // List polls (should show the newly created poll)
         mockMvc.perform(get("/polls"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(content().json("[{ \"question\": \"What is your favorite color?\", " +
+                        "\"voteOptions\": [{ \"caption\": \"Red\", \"presentationOrder\": 1 }, { \"caption\": \"Green\", \"presentationOrder\": 2 }, { \"caption\": \"Blue\", \"presentationOrder\": 3 }] }]"));
 
-        // 7. User 2 votes on the poll
+
+        // User 2 votes on the poll
         mockMvc.perform(post("/votes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 1, \"publishedAt\": \"2023-01-02T12:00:00Z\", \"selectedOption\": { \"id\": 1 } }"))
+                        .content("{\"username\": \"user2\", \"question\": \"What is your favorite color?\", \"caption\": \"Red\"}"))
                 .andExpect(status().isOk());
 
-        // 8. User 2 changes his vote
-        mockMvc.perform(put("/votes/1")
+        // User 2 changes his vote
+        mockMvc.perform(post("/votes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"id\": 1, \"publishedAt\": \"2023-01-02T12:30:00Z\", \"selectedOption\": { \"id\": 2 } }"))
+                        .content("{\"username\": \"user2\", \"question\": \"What is your favorite color?\", \"caption\": \"Green\"}"))
                 .andExpect(status().isOk());
 
-        // 9. List all votes (should show the most recent vote for User 2)
+        // List all votes (should show the most recent vote for User 2)
         mockMvc.perform(get("/votes"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].selectedOption.id").value(2));
+                .andExpect(content().json("[{ \"username\": \"user2\", \"question\": \"What is your favorite color?\", \"caption\": \"Green\" }]"));
 
-        // 10. Delete the poll
+        // Delete the poll
         mockMvc.perform(delete("/polls/1"))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
-        // 11. List all votes (should be empty)
+        // List votes (should be empty after poll deletion)
         mockMvc.perform(get("/votes"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(content().json("[]"));
     }
 }
-
